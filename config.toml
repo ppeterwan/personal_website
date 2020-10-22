@@ -56,8 +56,8 @@ disqusShortname = ""
       url = "/projects/Pay/Pay"
 
     [[params.navigation.links]]
-      name = "Elements"
-      url = "elements.html"
+      name = "GSS"
+      url = "/projects/GSS/GSS"
 
     # Add custom links here by uncommenting code below. To remove links just delete
     # the [[params.navigation.links]] map associated with that link. Copy and paste
@@ -110,10 +110,10 @@ disqusShortname = ""
       url = "/projects/Pay/Pay"
 
     [[params.tiles.showcase]]
-      title = "Magna"
-      subtitle = "Lorem Etiam Nullam"
+      title = "GSS"
+      subtitle = "General Social Survey (GSS)"
       image = "pic03.jpg"
-      url = "blogs/magna"
+      url = "/projects/GSS/GSS"
 
 
    # [[params.tiles.showcase]]
@@ -188,7 +188,7 @@ disqusShortname = ""
     phone = "+44 07868040701"
 
     [[params.contact.address]]
-    title = "WWorking Address"
+    title = "Working Address"
     street = "London Business School"
     city = "Regent's Park, London"
     country = "United Kingdom"
