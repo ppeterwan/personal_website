@@ -52,8 +52,8 @@ disqusShortname = ""
       url = "/projects/IMDB/IMDB"
 
     [[params.navigation.links]]
-      name = "Generic Blog"
-      url = "blogs/ipsum"
+      name = "Pay Discrimination"
+      url = "/projects/Pay/Pay"
 
     [[params.navigation.links]]
       name = "Elements"
