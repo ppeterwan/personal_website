@@ -1,0 +1,339 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="A MFA 2021 student at London Business School">
+	<meta name="author" content="Peter Wan">
+	<meta name="generator" content="Hugo 0.75.1" />
+	<title>IMDB &middot; Portfolio website for Peter Wan</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>WAN</strong> <span>A Young Professional Practationer</span></a>
+        <nav>
+            <a href="#menu">EXPLORE</a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">Home</a></li>
+            
+                <li><a href="/projects/IMDB">IMDB</a></li>
+            
+                <li><a href="/blogs/ipsum">Generic Blog</a></li>
+            
+                <li><a href="/elements.html">Elements</a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+                <li><a href="/blogs/peter" class="button special fit">ABOUT ME</a></li>
+            
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>IMDB</h1>
+                            </header>
+                            
+                                <span class="image main"><img src="/img/projects/pic09.jpg" alt="" /></span>
+                            
+                            
+
+
+<div id="analysis-of-movies--imdb-dataset" class="section level1">
+<h1>Analysis of movies- IMDB dataset</h1>
+<p>We will look at a subset sample of movies, taken from the <a href="https://www.kaggle.com/carolzhangdc/imdb-5000-movie-dataset">Kaggle IMDB 5000 movie dataset</a></p>
+<pre class="r"><code>#checking data set using glimpse and skim function
+
+movies &lt;- read_csv(here::here(&quot;data&quot;, &quot;movies.csv&quot;))
+glimpse(movies)
+skim(movies)</code></pre>
+<p>There are no missing values, derived from the skim function, however there are duplicate values, which is logical, as directors may have produced multiple movies or different movies may have received the same IMDB rating.</p>
+<pre class="r"><code># Creating table with count of movies by genre
+
+movies &lt;- read_csv(here::here(&quot;data&quot;, &quot;movies.csv&quot;))
+
+genre_table &lt;- movies %&gt;%
+group_by(genre) %&gt;%
+count(sort=TRUE)
+# kable (col.names= c(&quot;Genre&quot;, &quot;Count of Movies&quot;)) %&gt;%
+# kable_styling
+genre_table</code></pre>
+<pre><code>## # A tibble: 17 x 2
+## # Groups:   genre [17]
+##    genre           n
+##    &lt;chr&gt;       &lt;int&gt;
+##  1 Comedy        848
+##  2 Action        738
+##  3 Drama         498
+##  4 Adventure     288
+##  5 Crime         202
+##  6 Biography     135
+##  7 Horror        131
+##  8 Animation      35
+##  9 Fantasy        28
+## 10 Documentary    25
+## 11 Mystery        16
+## 12 Sci-Fi          7
+## 13 Family          3
+## 14 Musical         2
+## 15 Romance         2
+## 16 Western         2
+## 17 Thriller        1</code></pre>
+<pre class="r"><code># table with average gross earnings and budget
+movies &lt;- read_csv(here::here(&quot;data&quot;, &quot;movies.csv&quot;))
+
+EB_table &lt;- movies %&gt;%
+group_by(genre) %&gt;%
+summarise(mean_gross = mean(gross), mean_budget= mean(budget)) %&gt;%
+# kable (col.names= c(&quot;Genre&quot;, &quot;Gross Income&quot;, &quot;Mean Budget&quot;)) %&gt;%
+# kable_styling
+print(EB_table)</code></pre>
+<pre><code>## # A tibble: 17 x 3
+##    genre       mean_gross mean_budget
+##    &lt;chr&gt;            &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Action       86583860.   71354888.
+##  2 Adventure    95794257.   66290069.
+##  3 Animation    98433792.   61701429.
+##  4 Biography    45201805.   28543696.
+##  5 Comedy       42630552.   24446319.
+##  6 Crime        37502397.   26596169.
+##  7 Documentary  17353973.    5887852.
+##  8 Drama        37465371.   26242933.
+##  9 Family      149160478.   14833333.
+## 10 Fantasy      42408841.   17582143.
+## 11 Horror       37713738.   13504916.
+## 12 Musical      92084000     3189500 
+## 13 Mystery      67533021.   39218750 
+## 14 Romance      31264848.   25107500 
+## 15 Sci-Fi       29788371.   27607143.
+## 16 Thriller         2468      300000 
+## 17 Western      20821884     3465000</code></pre>
+<pre class="r"><code>#calculating variable return on budget, adding to table in descending order by genre
+
+ROB_table &lt;- movies %&gt;%
+mutate(movies, return_on_budget = gross / budget) %&gt;%
+group_by(genre) %&gt;%
+summarise(return_on_budget) %&gt;%
+arrange(desc(return_on_budget)) %&gt;%
+#kable (col.names= c(&quot;Genre&quot;, &quot;Return on Budget&quot;)) %&gt;%
+#kable_styling
+print(ROB_table)</code></pre>
+<pre><code>## # A tibble: 2,961 x 2
+## # Groups:   genre [17]
+##    genre     return_on_budget
+##    &lt;chr&gt;                &lt;dbl&gt;
+##  1 Horror               7194.
+##  2 Biography            2716.
+##  3 Horror               2342.
+##  4 Comedy                410.
+##  5 Horror                369.
+##  6 Horror                369.
+##  7 Action                292.
+##  8 Horror                228.
+##  9 Comedy                177.
+## 10 Horror                157.
+## # ... with 2,951 more rows</code></pre>
+<pre class="r"><code>#Table with top 15 directors by maximum gross amount, including mean, median and standard deviation of gross
+
+director_table &lt;- movies %&gt;%
+group_by(director) %&gt;%
+summarise(max_gross = max(gross), mean_gross = mean(gross), median_gross= median(gross), sd_gross = sd(gross)) %&gt;%
+arrange(desc(max_gross)) %&gt;%
+head(15) %&gt;%
+# kable (col.names= c(&quot;Director&quot;, &quot;Maximum Gross&quot;, &quot;Mean Gross&quot;, &quot;Median Gross&quot;, &quot;Standard Deviation of Gross&quot;)) %&gt;%
+# kable_styling
+print(director_table)</code></pre>
+<pre><code>## # A tibble: 15 x 5
+##    director          max_gross mean_gross median_gross   sd_gross
+##    &lt;chr&gt;                 &lt;dbl&gt;      &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+##  1 James Cameron     760505847 318287652.   175562880. 309171337.
+##  2 Colin Trevorrow   652177271 328092532.   328092532. 458325034.
+##  3 Joss Whedon       623279547 369202360.   458991599  308918632.
+##  4 Christopher Nolan 533316061 226653447    196667606. 187224133.
+##  5 George Lucas      474544677 348283696    380262555  146193880.
+##  6 Andrew Adamson    436471036 284361730    279680930. 120895765.
+##  7 Steven Spielberg  434949459 174524422.   164435221  101421051.
+##  8 Francis Lawrence  424645577 271700394.   281666058  135437020.
+##  9 Gore Verbinski    423032628 189942999.   123207194  154473822.
+## 10 Roger Allers      422783777 253543668.   253543668. 239341658.
+## 11 Lee Unkrich       414984497 414984497    414984497         NA 
+## 12 Shane Black       408992272 206614054.   206614054. 286206020.
+## 13 Gary Ross         407999255 182845556.   120147445  201267309.
+## 14 Anthony Russo     407197282 185720634    167675639  183508054.
+## 15 Sam Raimi         403706375 201460090.   234903076  162126632.</code></pre>
+<pre class="r"><code>#Table showing the spread of IMDB rating, in descending order of standard deviation
+
+ratings_table &lt;- movies %&gt;%
+group_by(genre) %&gt;%
+summarise(min_rating = min(rating), max_rating = max(rating), mean_rating = mean(rating), median_rating= median(rating), sd_rating = sd(rating)) %&gt;%
+arrange(desc(sd_rating)) %&gt;%
+# kable (col.names= c(&quot;Genre&quot;, &quot;Minimum Rating&quot;, &quot;Maximum Rating&quot;, &quot;Mean Rating&quot;, &quot;Median Rating&quot;, &quot;Standard Deviation of Rating&quot;)) %&gt;%
+# kable_styling
+print(ratings_table)</code></pre>
+<pre><code>## # A tibble: 17 x 6
+##    genre       min_rating max_rating mean_rating median_rating sd_rating
+##    &lt;chr&gt;            &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;         &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Western            4.1        7.3        5.70          5.70     2.26 
+##  2 Documentary        1.6        8.5        6.66          7.4      1.77 
+##  3 Family             5.7        7.9        6.5           5.9      1.22 
+##  4 Adventure          2.3        8.6        6.51          6.6      1.09 
+##  5 Sci-Fi             5          8.2        6.66          6.4      1.09 
+##  6 Action             2.1        9          6.23          6.3      1.03 
+##  7 Comedy             1.9        8.8        6.11          6.2      1.02 
+##  8 Horror             3.6        8.5        5.83          5.9      1.01 
+##  9 Animation          4.5        8          6.65          6.9      0.968
+## 10 Fantasy            4.3        7.9        6.15          6.45     0.959
+## 11 Drama              2.1        8.8        6.73          6.8      0.917
+## 12 Mystery            4.6        8.5        6.86          6.9      0.882
+## 13 Crime              4.8        9.3        6.92          6.9      0.849
+## 14 Biography          4.5        8.9        7.11          7.2      0.760
+## 15 Musical            6.3        7.2        6.75          6.75     0.636
+## 16 Romance            6.2        7.1        6.65          6.65     0.636
+## 17 Thriller           4.8        4.8        4.8           4.8     NA</code></pre>
+<pre class="r"><code>#grouping data by genre for density plot
+
+ratings &lt;- movies %&gt;%
+group_by(genre) %&gt;%
+summarise(rating)
+ratings</code></pre>
+<pre><code>## # A tibble: 2,961 x 2
+## # Groups:   genre [17]
+##    genre  rating
+##    &lt;chr&gt;   &lt;dbl&gt;
+##  1 Action    7.9
+##  2 Action    7  
+##  3 Action    8.1
+##  4 Action    9  
+##  5 Action    6.5
+##  6 Action    8.7
+##  7 Action    7.5
+##  8 Action    8.5
+##  9 Action    7.3
+## 10 Action    7.2
+## # ... with 2,951 more rows</code></pre>
+<pre class="r"><code>#creating density plot and faceting by genre
+
+rating_exp_plot &lt;- 
+ggplot(data = ratings, mapping = aes(x = rating, fill= genre))
+  
+rating_exp_plot + geom_density( alpha = 0.5) + facet_wrap(~genre) + labs(title = &quot;Distribution of Ratings by Genre&quot;, x= &quot;Rating&quot;, y= &quot;Density&quot;)</code></pre>
+<p><img src="/projects/IMDB/imdb_files/figure-html/Distr_movies-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Generally, once a certain amount of Facebook Likes is reached, gross earnings appear to increase, however as likes exceed this initial mark, the majority of movies don’t produce significantly more earnings, but cluster around a certain range, with the exception of a few outliers.</p>
+<pre class="r"><code># scatter plot showing relationship between facebook likes and gross earnings, adjusted x-axis by scale of log 10
+
+movies &lt;- read_csv(here::here(&quot;data&quot;, &quot;movies.csv&quot;))
+
+ggplot(movies, aes(x=cast_facebook_likes,y=gross))  + labs(title = &quot;Relationship of Cast&#39;s Facebook Likes and Movies Gross Earnings&quot;, x= &quot;Cast&#39;s Facebook Likes&quot;, y= &quot;Gross Earnings&quot;) + scale_x_log10() +
+    geom_point()</code></pre>
+<p><img src="/projects/IMDB/imdb_files/figure-html/gross_on_fblikes-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Looking at the chart, there seems to be a positive relationship between budget and gross earnings, which thus implicate that budget generally can be used as a predictor of gross earnings.</p>
+<pre class="r"><code># scatterplot showing relationship between gross and budfet, adjusting x-axis by scale of log 10.
+
+ggplot(movies, aes(x=budget, 
+                        y=gross)) + labs(title = &quot;Relationship between Budget and Movies Gross Earnings&quot;, x= &quot;Movie Budget&quot;, y= &quot;Gross Earnings&quot;) + scale_x_log10() +  geom_point()</code></pre>
+<p><img src="/projects/IMDB/imdb_files/figure-html/gross_on_budget-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>Generally, there seems to be a positive relationship between IMDB ratings and gross earnings of movies for those genres where we have multiple data points that clarify a trend. However, movies from the genre Acrtion and Adventure show a significantly stronger correlation between this relationship than for example comedies. Crime and Horror appear to be more flat, which could reflect that ratings have less of an effect on the decision to see a movie, which in return postively affects gross earnings. Thus, one could conclude that ratings for Action and Adventure movies particularly affect the decision to watch a movie or not, which in return translates into higher gross earnings.</p>
+<pre class="r"><code># scatterplot faceted by genre showing relationship between ratings and gross income
+ggplot(movies, aes(x=rating, 
+                        y=gross, colour = genre)) + labs(title = &quot;Relationship of IMDB Ratings and Movies Gross Earnings&quot;, x= &quot;IMDB Rating&quot;, y= &quot;Gross Earnings&quot;) + facet_wrap(~genre) + geom_point()</code></pre>
+<p><img src="/projects/IMDB/imdb_files/figure-html/gross_on_rating-1.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="https://twitter.com/PeterWan0908" class="icon alt fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
+                
+                    <li><a href="https://www.facebook.com/peter.wan.3110/" class="icon alt fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
+                
+                    <li><a href="https://www.instagram.com/ppeter_wan/" class="icon alt fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+                
+                    <li><a href="https://github.com/ppeterwan" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://www.linkedin.com/in/peter-wan/" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; Peter Wan 2020</li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>

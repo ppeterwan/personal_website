@@ -6,7 +6,17 @@
     <description>Recent content on Portfolio website for Peter Wan</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 31 Oct 2017 22:42:51 -0500</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 22 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>IMDB</title>
+      <link>/projects/imdb/imdb/</link>
+      <pubDate>Thu, 22 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/imdb/imdb/</guid>
+      <description>Analysis of movies- IMDB datasetWe will look at a subset sample of movies, taken from the Kaggle IMDB 5000 movie dataset
+#checking data set using glimpse and skim functionmovies &amp;lt;- read_csv(here::here(&amp;quot;data&amp;quot;, &amp;quot;movies.csv&amp;quot;))glimpse(movies)skim(movies)There are no missing values, derived from the skim function, however there are duplicate values, which is logical, as directors may have produced multiple movies or different movies may have received the same IMDB rating.</description>
+    </item>
+    
     <item>
       <title>Aliquam</title>
       <link>/blogs/aliquam/</link>
@@ -35,12 +45,12 @@
     </item>
     
     <item>
-      <title>Ipsum</title>
-      <link>/blogs/ipsum/</link>
+      <title>About Me</title>
+      <link>/blogs/peter/</link>
       <pubDate>Tue, 31 Oct 2017 21:28:43 -0500</pubDate>
       
-      <guid>/blogs/ipsum/</guid>
-      <description>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.</description>
+      <guid>/blogs/peter/</guid>
+      <description>Peter is a student looking to pursue career opportunities that are both intellectually stimulating and challenging. He just graduated from Cornell University double majoring in Statistical Science and Information Science. He is very interested in the finance industry so he joined London Business School to study masters in financial analysis and expect this experience to transform himself into a professional practitioner. He was fortune to have comprehensive internship experiences in the field such as brokerage, auditing, investment banking, FinTech, and private equity.</description>
     </item>
     
     <item>

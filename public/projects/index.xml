@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects on Portfolio website for Peter Wan</title>
+    <link>/projects/</link>
+    <description>Recent content in Projects on Portfolio website for Peter Wan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 22 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="/projects/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>IMDB</title>
+      <link>/projects/imdb/imdb/</link>
+      <pubDate>Thu, 22 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/imdb/imdb/</guid>
+      <description>Analysis of movies- IMDB datasetWe will look at a subset sample of movies, taken from the Kaggle IMDB 5000 movie dataset
+#checking data set using glimpse and skim functionmovies &amp;lt;- read_csv(here::here(&amp;quot;data&amp;quot;, &amp;quot;movies.csv&amp;quot;))glimpse(movies)skim(movies)There are no missing values, derived from the skim function, however there are duplicate values, which is logical, as directors may have produced multiple movies or different movies may have received the same IMDB rating.</description>
+    </item>
+    
+  </channel>
+</rss>
