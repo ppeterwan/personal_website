@@ -1,0 +1,178 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:26:09-05:00"
+description: Movies - IMDB
+draft: false
+image: pic09.jpg
+keywords: ""
+slug: IMDB
+title: IMDB
+---
+
+
+```{r, setup, echo=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+
+```{r load-libraries, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(fivethirtyeight)
+library(here)
+library(skimr)
+library(janitor)
+library(vroom)
+library(tidyquant)
+library(rvest)    # scrape websites
+library(purrr)  
+library(lubridate) #to handle dates
+library(kableExtra)
+```
+
+
+# Analysis of movies- IMDB dataset
+
+We will look at a subset sample of movies, taken from the [Kaggle IMDB 5000 movie dataset](https://www.kaggle.com/carolzhangdc/imdb-5000-movie-dataset)
+
+  
+```{r,load_movies, warning=FALSE, message=FALSE, eval=FALSE}
+#checking data set using glimpse and skim function
+
+movies <- read_csv(here::here("data", "movies.csv"))
+glimpse(movies)
+skim(movies)
+
+```
+There are no missing values, derived from the skim function, however there are duplicate values, which is logical, as directors may have produced multiple movies or different movies may have received the same IMDB rating.
+
+```{r,genretable_movies, warning=FALSE, message=FALSE}
+# Creating table with count of movies by genre
+
+movies <- read_csv(here::here("data", "movies.csv"))
+
+genre_table <- movies %>%
+group_by(genre) %>%
+count(sort=TRUE)
+# kable (col.names= c("Genre", "Count of Movies")) %>%
+# kable_styling
+genre_table
+```
+
+
+```{r,EB_movies, warning=FALSE, message=FALSE}
+# table with average gross earnings and budget
+movies <- read_csv(here::here("data", "movies.csv"))
+
+EB_table <- movies %>%
+group_by(genre) %>%
+summarise(mean_gross = mean(gross), mean_budget= mean(budget)) %>%
+# kable (col.names= c("Genre", "Gross Income", "Mean Budget")) %>%
+# kable_styling
+print(EB_table)
+```
+
+
+```{r,ROB_movies, warning=FALSE, message=FALSE}
+#calculating variable return on budget, adding to table in descending order by genre
+
+ROB_table <- movies %>%
+mutate(movies, return_on_budget = gross / budget) %>%
+group_by(genre) %>%
+summarise(return_on_budget) %>%
+arrange(desc(return_on_budget)) %>%
+#kable (col.names= c("Genre", "Return on Budget")) %>%
+#kable_styling
+print(ROB_table)
+```
+
+
+```{r,Director_movies, warning=FALSE, message=FALSE}
+#Table with top 15 directors by maximum gross amount, including mean, median and standard deviation of gross
+
+director_table <- movies %>%
+group_by(director) %>%
+summarise(max_gross = max(gross), mean_gross = mean(gross), median_gross= median(gross), sd_gross = sd(gross)) %>%
+arrange(desc(max_gross)) %>%
+head(15) %>%
+# kable (col.names= c("Director", "Maximum Gross", "Mean Gross", "Median Gross", "Standard Deviation of Gross")) %>%
+# kable_styling
+print(director_table)
+```
+
+
+```{r,Ratings_movies, warning=FALSE, message=FALSE}
+#Table showing the spread of IMDB rating, in descending order of standard deviation
+
+ratings_table <- movies %>%
+group_by(genre) %>%
+summarise(min_rating = min(rating), max_rating = max(rating), mean_rating = mean(rating), median_rating= median(rating), sd_rating = sd(rating)) %>%
+arrange(desc(sd_rating)) %>%
+# kable (col.names= c("Genre", "Minimum Rating", "Maximum Rating", "Mean Rating", "Median Rating", "Standard Deviation of Rating")) %>%
+# kable_styling
+print(ratings_table)
+```
+
+
+```{r,Distr_movies, warning=FALSE, message=FALSE}
+#grouping data by genre for density plot
+
+ratings <- movies %>%
+group_by(genre) %>%
+summarise(rating)
+ratings
+
+#creating density plot and faceting by genre
+
+rating_exp_plot <- 
+ggplot(data = ratings, mapping = aes(x = rating, fill= genre))
+  
+rating_exp_plot + geom_density( alpha = 0.5) + facet_wrap(~genre) + labs(title = "Distribution of Ratings by Genre", x= "Rating", y= "Density")
+   
+```
+
+Generally, once a certain amount of Facebook Likes is reached, gross earnings appear to increase, however as likes exceed this initial mark, the majority of movies don't produce significantly more earnings, but cluster around a certain range, with the exception of a few outliers.
+ 
+```{r, gross_on_fblikes}
+
+# scatter plot showing relationship between facebook likes and gross earnings, adjusted x-axis by scale of log 10
+
+movies <- read_csv(here::here("data", "movies.csv"))
+
+ggplot(movies, aes(x=cast_facebook_likes,y=gross))  + labs(title = "Relationship of Cast's Facebook Likes and Movies Gross Earnings", x= "Cast's Facebook Likes", y= "Gross Earnings") + scale_x_log10() +
+    geom_point()
+```
+
+Looking at the chart, there seems to be a positive relationship between budget and gross earnings, which thus implicate that budget generally can be used as a predictor of gross earnings.
+
+```{r, gross_on_budget}
+
+# scatterplot showing relationship between gross and budfet, adjusting x-axis by scale of log 10.
+
+ggplot(movies, aes(x=budget, 
+                        y=gross)) + labs(title = "Relationship between Budget and Movies Gross Earnings", x= "Movie Budget", y= "Gross Earnings") + scale_x_log10() +  geom_point()
+```
+
+Generally, there seems to be a positive relationship between IMDB ratings and gross earnings of movies for those genres where we have multiple data points that clarify a trend. However, movies from the genre Acrtion and Adventure show a significantly stronger correlation between this relationship than for example comedies. Crime and Horror appear to be more flat, which could reflect that ratings have less of an effect on the decision to see a movie, which in return postively affects gross earnings. Thus, one could conclude that ratings for Action and Adventure movies particularly affect the decision to watch a movie or not, which in return translates into higher gross earnings. 
+```{r, gross_on_rating}
+
+# scatterplot faceted by genre showing relationship between ratings and gross income
+ggplot(movies, aes(x=rating, 
+                        y=gross, colour = genre)) + labs(title = "Relationship of IMDB Ratings and Movies Gross Earnings", x= "IMDB Rating", y= "Gross Earnings") + facet_wrap(~genre) + geom_point()
+```

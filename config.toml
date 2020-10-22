@@ -48,8 +48,8 @@ disqusShortname = ""
       url = "#"
 
     [[params.navigation.links]]
-      name = "Airbnb"
-      url = "/projects/Airbnb"
+      name = "IMDB"
+      url = "/projects/IMDB"
 
     [[params.navigation.links]]
       name = "Generic Blog"
