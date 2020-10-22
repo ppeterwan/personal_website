@@ -2,6 +2,7 @@
 categories:
 - ""
 - ""
+date: "2020-10-22"
 description: Movies - IMDB
 draft: false
 image: pic09.jpg
