@@ -49,7 +49,7 @@ disqusShortname = ""
 
     [[params.navigation.links]]
       name = "IMDB"
-      url = "/projects/IMDB"
+      url = "/projects/IMDB/IMDB"
 
     [[params.navigation.links]]
       name = "Generic Blog"
