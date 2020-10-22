@@ -1,5 +1,5 @@
 # Site settings
-baseURL = "http://example.org/"
+baseURL = "https://pwan-website.netlify.app/"
 languageCode = "en-us"
 title = "Portfolio website for Peter Wan"
 theme = "forty"
@@ -48,8 +48,8 @@ disqusShortname = ""
       url = "#"
 
     [[params.navigation.links]]
-      name = "Blogs"
-      url = "blogs"
+      name = "Airbnb"
+      url = "/projects/Airbnb"
 
     [[params.navigation.links]]
       name = "Generic Blog"
