@@ -1,7 +1,7 @@
 # Site settings
 baseURL = "http://example.org/"
 languageCode = "en-us"
-title = "Forty"
+title = "Portfolio website for Peter Wan"
 theme = "forty"
 
 # Enter your tracking code to enable Google Analytics
@@ -19,8 +19,8 @@ disqusShortname = ""
   # CSS class.
 
   # Provide your metadata here.
-  name = "Your name"
-  description = "Your description"
+  name = "Peter Wan"
+  description = "A MFA 2021 student at London Business School"
 
   # Link custom assets relative to /static
   custom_css = []
@@ -37,9 +37,9 @@ disqusShortname = ""
 
   # Navigation Section
   [params.navigation]
-    title = "Forty"
-    subtitle = "By HTML5 Up"
-    menu = "Menu"
+    title = "WAN"
+    subtitle = "A Young Professional Practationer"
+    menu = "EXPLORE"
     # Optional logo as brand stored in img/
     # logo = "logo.png"
 
@@ -68,22 +68,22 @@ disqusShortname = ""
 
     # Button Style 1
     [[params.navigation.button1]]
-      name = "Get Started"
-      url = "blogs"
+      name = "ABOUT ME"
+      url = ""
 
     # Button Style 2
-    [[params.navigation.button2]]
-      name = "Log In"
-      url = "#"
+  #  [[params.navigation.button2]]
+     # name = "Log In"
+     # url = "#"
 
 
   # Banner section
   [params.banner]
     # To change the background image on the homepage banner, replace 'banner.jpg' in
     # the 'static/img' folder.
-    title = "Hi, my name is Forty"
-    subtitle = "A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP\nAND RELEASED UNDER THE CREATIVE COMMONS."
-    buttonText = "Get Started"
+    title = "Welcome to Peter Wan's Portfolio Website"
+    subtitle = "Born in China, Studied in U.S.A, Now in U.K"
+    buttonText = "Start Navigation"
 
 
   # Tiles Section
@@ -138,13 +138,21 @@ disqusShortname = ""
   # Section Type Two
   [params.two]
     enable = true
-    title = "Massa libero"
-    subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
-    Mauris aliquet magna magna sed nunc rhoncus pharetra. 
-    Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
-    Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
-    Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
-    buttonText = "Get Started"
+    title = "RECENT INSIGHTS"
+    subtitle = """COVID-19 has influenced the economic market, political election, and people's behaviors in a huge degree.
+    The market sector I am currently interested in is the new retail in the fresh market. 
+    Before the COVID-19, 70% of the Chinese fresh market were taken either by farmers’ markets or individual retailers,  
+    20% were taken by supermarkets, and only 5% were taken by online sales channels. 
+    The outbreak of coronavirus changed people’s behavior in China and pushed people to accept new retail 
+    because farmers’ markets were all closed and people were restricted from going outdoors. The order 
+    volume of leading new retail players in the fresh market such as Yonghui supermarket, hemaxiansheng, 
+    and chaojiwuzhong, were increased by twice to four times, and stock price of yonghui supermarket were 
+    increased by more than 30% during the pandemic. The fresh market size for new retail is 5.4 trillion RMB 
+    and in the next five year, it will increase to 7 trillion RMB. The market space is still large and the 
+    companies become more normalized and systematic which will bring a higher valuation premium. I 
+    believe that there will be many M&A or IPO opportunities in the future, 
+    especially at this time when the market is reconsidering the valuation of the sector post-pandemic."""
+    buttonText = "EXPLORE MORE"
     url = "blogs"
 
 
@@ -172,50 +180,45 @@ disqusShortname = ""
     # by copying the corresponding map with frontmatter code.
     [[params.contact.email]]
     title = "Email"
-    email = "example@domain.com"
+    email = "pwan.mfa2021@london.edu"
 
     [[params.contact.phone]]
     title = "Phone"
-    phone = "(000) 000-0000 x1234"
+    phone = "+44 07868040701"
 
     [[params.contact.address]]
-    title = "Address"
-    street = "Street"
-    city = "City, ST 00000"
-    country = "Country"
+    title = "WWorking Address"
+    street = "London Business School"
+    city = "Regent's Park, London"
+    country = "United Kingdom"
 
   # Footer section
   [params.footer]
     enable = true
-    copyright = "Company Name"
+    copyright = "Peter Wan 2020"
 
     # Uses font awesome icons
     [[params.footer.social]]
       icon = "fa-twitter"
-      url= "https://www.twitter.com"
+      url= "https://twitter.com/PeterWan0908"
       label = "Twitter"
 
     [[params.footer.social]]
       icon = "fa-facebook"
-      url= "https://www.facebook.com"
+      url= "https://www.facebook.com/peter.wan.3110/"
       label = "Facebook"
 
     [[params.footer.social]]
       icon = "fa-instagram"
-      url= "https://www.instagram.com"
+      url= "https://www.instagram.com/ppeter_wan/"
       label = "Instagram"
     
     [[params.footer.social]]
       icon = "fa-github"
-      url= "https://www.github.com"
+      url= "https://github.com/ppeterwan"
       label = "GitHub"
 
     [[params.footer.social]]
       icon = "fa-linkedin"
-      url= "https://www.linkedin.com"
+      url= "https://www.linkedin.com/in/peter-wan/"
       label = "LinkedIn"
-
-    [[params.footer.quicklinks]]
-      text = "Design: "
-      url= "https://www.html5up.net"
-      alt = "HTML5 UP"
