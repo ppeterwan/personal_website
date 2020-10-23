@@ -8,6 +8,16 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 22 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="/projects/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>General Social Survey (GSS)</title>
+      <link>/projects/gss/gss/</link>
+      <pubDate>Thu, 22 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/gss/gss/</guid>
+      <description>General Social Survey (GSS)The General Social Survey (GSS) gathers data on American society in order to monitor and explain trends in attitudes, behaviours, and attributes. Many trends have been tracked for decades, so one can see the evolution of attitudes, etc in American Society.
+In this assignment we analyze data from the 2016 GSS sample data, using it to estimate values of population parameters of interest about US adults.</description>
+    </item>
+    
+    <item>
       <title>IMDB</title>
       <link>/projects/imdb/imdb/</link>
       <pubDate>Thu, 22 Oct 2020 00:00:00 +0000</pubDate>
@@ -15,6 +25,15 @@
       <guid>/projects/imdb/imdb/</guid>
       <description>Analysis of movies- IMDB datasetWe will look at a subset sample of movies, taken from the Kaggle IMDB 5000 movie dataset
 #checking data set using glimpse and skim functionmovies &amp;lt;- read_csv(here::here(&amp;quot;data&amp;quot;, &amp;quot;movies.csv&amp;quot;))glimpse(movies)skim(movies)There are no missing values, derived from the skim function, however there are duplicate values, which is logical, as directors may have produced multiple movies or different movies may have received the same IMDB rating.</description>
+    </item>
+    
+    <item>
+      <title>Omega Group plc- Pay Discrimination</title>
+      <link>/projects/pay/pay/</link>
+      <pubDate>Thu, 22 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/pay/pay/</guid>
+      <description>Omega Group plc- Pay DiscriminationAt the last board meeting of Omega Group Plc., the headquarters of a large multinational company, the issue was raised that women were being discriminated in the company, in the sense that the salaries were not the same for male and female executives. A quick analysis of a sample of 50 employees (of which 24 men and 26 women) revealed that the average salary for men was about 8,700 higher than for women.</description>
     </item>
     
   </channel>

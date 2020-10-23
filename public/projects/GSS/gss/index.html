@@ -1,0 +1,275 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="A MFA 2021 student at London Business School">
+	<meta name="author" content="Peter Wan">
+	<meta name="generator" content="Hugo 0.75.1" />
+	<title>General Social Survey (GSS) &middot; Portfolio website for Peter Wan</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>WAN</strong> <span>A Young Professional Practationer</span></a>
+        <nav>
+            <a href="#menu">EXPLORE</a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">Home</a></li>
+            
+                <li><a href="/projects/IMDB/IMDB">IMDB</a></li>
+            
+                <li><a href="/projects/Pay/Pay">Pay Discrimination</a></li>
+            
+                <li><a href="/projects/GSS/GSS">GSS</a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+                <li><a href="/blogs/peter" class="button special fit">ABOUT ME</a></li>
+            
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>General Social Survey (GSS)</h1>
+                            </header>
+                            
+                                <span class="image main"><img src="/img/projects/pic09.jpg" alt="" /></span>
+                            
+                            
+
+
+<div id="general-social-survey-gss" class="section level1">
+<h1>General Social Survey (GSS)</h1>
+<p>The <a href="http://www.gss.norc.org/">General Social Survey (GSS)</a> gathers data on American society in order to monitor and explain trends in attitudes, behaviours, and attributes. Many trends have been tracked for decades, so one can see the evolution of attitudes, etc in American Society.</p>
+<p>In this assignment we analyze data from the <strong>2016 GSS sample data</strong>, using it to estimate values of <em>population parameters</em> of interest about US adults. The GSS sample data file has 2867 observations of 935 variables, but we are only interested in very few of these variables and you are using a smaller file.</p>
+<pre class="r"><code>gss &lt;- read_csv(here::here(&quot;data&quot;, &quot;smallgss2016.csv&quot;), 
+                na = c(&quot;&quot;, &quot;Don&#39;t know&quot;,
+                       &quot;No answer&quot;, &quot;Not applicable&quot;))</code></pre>
+<p>You will also notice that many responses should not be taken into consideration, like “No Answer”, “Don’t Know”, “Not applicable”, “Refused to Answer”.</p>
+<p>We will be creating 95% confidence intervals for population parameters. The variables we have are the following:</p>
+<ul>
+<li>hours and minutes spent on email weekly. The responses to these questions are recorded in the <code>emailhr</code> and <code>emailmin</code> variables. For example, if the response is 2.50 hours, this would be recorded as emailhr = 2 and emailmin = 30.</li>
+<li><code>snapchat</code>, <code>instagrm</code>, <code>twitter</code>: whether respondents used these social media in 2016</li>
+<li><code>sex</code>: Female - Male</li>
+<li><code>degree</code>: highest education level attained</li>
+</ul>
+<div id="instagram-and-snapchat-by-sex" class="section level2">
+<h2>Instagram and Snapchat, by sex</h2>
+<p>Can we estimate the <em>population</em> proportion of Snapchat or Instagram users in 2016?</p>
+<ol style="list-style-type: decimal">
+<li>Create a new variable, <code>snap_insta</code> that is <em>Yes</em> if the respondent reported using any of Snapchat (<code>snapchat</code>) or Instagram (<code>instagrm</code>), and <em>No</em> if not. If the recorded value was NA for both of these questions, the value in your new variable should also be NA.</li>
+</ol>
+<pre class="r"><code>gss &lt;- gss %&gt;% 
+  mutate(
+    snap_insta=if_else(
+      snapchat==&quot;NA&quot;&amp;instagrm==&quot;NA&quot;,&quot;NA&quot;,if_else(
+        snapchat==&quot;Yes&quot;|instagrm==&quot;Yes&quot;,&quot;Yes&quot;,&quot;No&quot;)))</code></pre>
+<ol style="list-style-type: decimal">
+<li>Calculate the proportion of Yes’s for <code>snap_insta</code> among those who answered the question, i.e. excluding NAs.</li>
+</ol>
+<pre class="r"><code>count(gss$snap_insta == &quot;Yes&quot;)/count(gss$snap_insta == &quot;Yes&quot; | gss$snap_insta ==&quot;No&quot; )</code></pre>
+<pre><code>## n_TRUE 
+##  0.375</code></pre>
+<ol style="list-style-type: decimal">
+<li>Using the CI formula for proportions, please construct 95% CIs for men and women who used either Snapchat or Instagram</li>
+</ol>
+<pre class="r"><code># For Men
+gss_men &lt;- gss %&gt;% 
+  filter(gss$sex ==&quot;Male&quot;)
+
+total_men &lt;- count(gss_men$snap_insta == &quot;Yes&quot; | gss$snap_insta ==&quot;No&quot; )
+men_p &lt;- count(gss_men$snap_insta == &quot;Yes&quot;)/total_men
+error_men &lt;- qnorm(0.95)*sqrt(men_p*(1-men_p)/total_men) 
+left_men &lt;- men_p - error_men
+right_men &lt;- men_p + error_men
+
+print(left_men)</code></pre>
+<pre><code>## n_TRUE 
+##  0.147</code></pre>
+<pre class="r"><code>print(right_men)</code></pre>
+<pre><code>## n_TRUE 
+##  0.183</code></pre>
+<pre class="r"><code># For Women
+gss_women &lt;- gss %&gt;% 
+  filter(gss$sex ==&quot;Female&quot;)
+
+total_women &lt;- count(gss_women$snap_insta == &quot;Yes&quot; | gss$snap_insta ==&quot;No&quot; )
+women_p &lt;- count(gss_women$snap_insta == &quot;Yes&quot;)/total_women
+error_women &lt;- qnorm(0.95)*sqrt(women_p*(1-women_p)/total_women) 
+left_women &lt;- women_p - error_women
+right_women &lt;- women_p + error_women
+
+print(left_women)</code></pre>
+<pre><code>## n_TRUE 
+##  0.233</code></pre>
+<pre class="r"><code>print(right_women)</code></pre>
+<pre><code>## n_TRUE 
+##  0.273</code></pre>
+</div>
+<div id="twitter-by-education-level" class="section level2">
+<h2>Twitter, by education level</h2>
+<p>Can we estimate the <em>population</em> proportion of Twitter users by education level in 2016?.</p>
+<p>There are 5 education levels in variable <code>degree</code> which, in ascneding order of years of education, are Lt high school, High School, Junior college, Bachelor, Graduate.</p>
+<ol style="list-style-type: decimal">
+<li>Turn <code>degree</code> from a character variable into a factor variable. Make sure the order is the correct one and that levels are not sorted alphabetically which is what R by default does.</li>
+</ol>
+<pre class="r"><code>  gss$degree &lt;- factor(gss$degree, ordered = TRUE, levels = c(&quot;Lt high School&quot;,&quot;High school&quot;,&quot;Junior college&quot;,&quot;Bachelor&quot;,&quot;Graduate&quot;,&quot;NA&quot;))
+  class(gss$degree)</code></pre>
+<pre><code>## [1] &quot;ordered&quot; &quot;factor&quot;</code></pre>
+<pre class="r"><code>  levels(gss$degree)</code></pre>
+<pre><code>## [1] &quot;Lt high School&quot; &quot;High school&quot;    &quot;Junior college&quot; &quot;Bachelor&quot;      
+## [5] &quot;Graduate&quot;       &quot;NA&quot;</code></pre>
+<pre class="r"><code>  gss &lt;- gss %&gt;% 
+    arrange(gss$degree)</code></pre>
+<ol style="list-style-type: decimal">
+<li>Create a new variable, <code>bachelor_graduate</code> that is <em>Yes</em> if the respondent has either a <code>Bachelor</code> or <code>Graduate</code> degree. As before, if the recorded value for either was NA, the value in your new variable should also be NA.</li>
+</ol>
+<pre class="r"><code>gss &lt;- gss %&gt;% 
+  mutate(
+    bachelor_graduate=if_else(
+      degree==&quot;Bachelor&quot; | degree==&quot;Graduate&quot;,&quot;Yes&quot;,if_else(
+        degree==&quot;NA&quot;,&quot;NA&quot;,&quot;No&quot;)))</code></pre>
+<ol style="list-style-type: decimal">
+<li>Calculate the proportion of <code>bachelor_graduate</code> who do (Yes) and who don’t (No) use twitter.</li>
+</ol>
+<pre class="r"><code>count(gss$bachelor_graduate == &quot;Yes&quot; &amp; gss$twitter == &quot;Yes&quot;)/
+  count(gss$bachelor_graduate == &quot;Yes&quot; &amp; gss$twitter !=&quot;NA&quot; )</code></pre>
+<pre><code>## n_TRUE 
+##  0.233</code></pre>
+<ol style="list-style-type: decimal">
+<li>Using the CI formula for proportions, please construct two 95% CIs for <code>bachelor_graduate</code> vs whether they use (Yes) and don’t (No) use twitter.</li>
+</ol>
+<pre class="r"><code># bachelor_graduate using twitter
+gss_bg &lt;- gss %&gt;% 
+  filter(gss$bachelor_graduate ==&quot;Yes&quot;)
+
+total_bg &lt;- count(gss_bg$bachelor_graduate)
+print(total_bg)</code></pre>
+<pre><code>## n_Yes 
+##   854</code></pre>
+<pre class="r"><code>yes_p &lt;- count(gss_bg$twitter == &quot;Yes&quot;)/total_bg
+error_yes &lt;- qnorm(0.95)*sqrt(yes_p*(1-yes_p)/count(gss_bg$twitter)) 
+left_yes &lt;- yes_p - error_yes
+right_yes &lt;- yes_p + error_yes
+
+
+print(left_yes)</code></pre>
+<pre><code>## n_TRUE 
+##  0.104</code></pre>
+<pre class="r"><code>print(right_yes)</code></pre>
+<pre><code>## n_TRUE 
+##  0.163</code></pre>
+<pre class="r"><code># bachelor_graduate not using twitter
+no_p &lt;- count(gss_bg$twitter == &quot;No&quot;)/total_bg
+error_no &lt;- qnorm(0.95)*sqrt(no_p*(1-no_p)/count(gss_bg$twitter)) 
+left_no &lt;- no_p - error_no
+right_no &lt;- no_p + error_no
+
+print(left_no)</code></pre>
+<pre><code>## n_TRUE 
+##  0.396</code></pre>
+<pre class="r"><code>print(right_no)</code></pre>
+<pre><code>## n_TRUE 
+##  0.482</code></pre>
+</div>
+</div>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="https://twitter.com/PeterWan0908" class="icon alt fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
+                
+                    <li><a href="https://www.facebook.com/peter.wan.3110/" class="icon alt fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
+                
+                    <li><a href="https://www.instagram.com/ppeter_wan/" class="icon alt fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+                
+                    <li><a href="https://github.com/ppeterwan" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://www.linkedin.com/in/peter-wan/" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; Peter Wan 2020</li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>

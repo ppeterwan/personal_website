@@ -1,0 +1,180 @@
+---
+categories:
+- ""
+- ""
+date: "2020-10-22"
+description: General Social Survey (GSS)
+draft: false
+image: pic09.jpg
+keywords: ""
+slug: GSS
+title: General Social Survey (GSS)
+---
+
+# General Social Survey (GSS)
+
+
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+
+```{r load-libraries, include=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(here)
+library(skimr)
+library(janitor)
+library(httr)
+library(readxl)
+library(vroom)
+library(dplyr)
+library(grid)
+library(gridExtra)
+
+```
+
+
+The [General Social Survey (GSS)](http://www.gss.norc.org/) gathers data on American society in order to monitor and explain trends in attitudes, behaviours, and attributes. Many trends have been tracked for decades, so one can see the evolution of attitudes, etc in American Society.
+
+
+In this assignment we analyze data from the **2016 GSS sample data**, using it to estimate values of *population parameters* of interest about US adults. The GSS sample data file has 2867 observations of 935 variables, but we are only interested in very few of these variables and you are using a smaller file.
+
+
+```{r, read_gss_data, cache=TRUE}
+gss <- read_csv(here::here("data", "smallgss2016.csv"), 
+                na = c("", "Don't know",
+                       "No answer", "Not applicable"))
+```
+
+You will also notice that many responses should not be taken into consideration, like "No Answer", "Don't Know", "Not applicable", "Refused to Answer".
+
+We will be creating 95% confidence intervals for population parameters. The variables we have are the following:
+
+- hours and minutes spent on email weekly. The responses to these questions are recorded in the `emailhr` and `emailmin` variables. For example, if the response is 2.50 hours, this would be recorded as emailhr = 2 and emailmin = 30.
+- `snapchat`, `instagrm`, `twitter`: whether respondents used these social media in 2016
+- `sex`: Female - Male
+- `degree`: highest education level attained
+
+## Instagram and Snapchat, by sex
+
+Can we estimate the *population* proportion of Snapchat or Instagram users in 2016?
+
+1. Create a  new variable, `snap_insta` that is *Yes* if the respondent reported using any of Snapchat (`snapchat`) or Instagram (`instagrm`), and *No* if not. If the recorded value was NA for both of these questions, the value in your new variable should also be NA.
+```{r}
+gss <- gss %>% 
+  mutate(
+    snap_insta=if_else(
+      snapchat=="NA"&instagrm=="NA","NA",if_else(
+        snapchat=="Yes"|instagrm=="Yes","Yes","No")))
+```
+
+1. Calculate the proportion of Yes’s for `snap_insta` among those who answered the question, i.e. excluding NAs.
+```{r}
+count(gss$snap_insta == "Yes")/count(gss$snap_insta == "Yes" | gss$snap_insta =="No" )
+```
+
+
+1. Using the CI formula for proportions, please construct 95% CIs for men and women who used either Snapchat or Instagram
+```{r}
+# For Men
+gss_men <- gss %>% 
+  filter(gss$sex =="Male")
+
+total_men <- count(gss_men$snap_insta == "Yes" | gss$snap_insta =="No" )
+men_p <- count(gss_men$snap_insta == "Yes")/total_men
+error_men <- qnorm(0.95)*sqrt(men_p*(1-men_p)/total_men) 
+left_men <- men_p - error_men
+right_men <- men_p + error_men
+
+print(left_men)
+print(right_men)
+
+# For Women
+gss_women <- gss %>% 
+  filter(gss$sex =="Female")
+
+total_women <- count(gss_women$snap_insta == "Yes" | gss$snap_insta =="No" )
+women_p <- count(gss_women$snap_insta == "Yes")/total_women
+error_women <- qnorm(0.95)*sqrt(women_p*(1-women_p)/total_women) 
+left_women <- women_p - error_women
+right_women <- women_p + error_women
+
+print(left_women)
+print(right_women)
+```
+
+
+## Twitter, by education level
+
+Can we estimate the *population* proportion of Twitter users by education level in 2016?. 
+
+There are 5 education levels in variable `degree` which, in ascneding order of years of education, are Lt high school, High School, Junior college, Bachelor, Graduate. 
+
+1. Turn `degree` from a character variable into a factor variable. Make sure the order is the correct one and that levels are not sorted alphabetically which is what R by default does. 
+```{r}
+  gss$degree <- factor(gss$degree, ordered = TRUE, levels = c("Lt high School","High school","Junior college","Bachelor","Graduate","NA"))
+  class(gss$degree)
+  levels(gss$degree)
+  
+  gss <- gss %>% 
+    arrange(gss$degree)
+```
+1. Create a  new variable, `bachelor_graduate` that is *Yes* if the respondent has either a `Bachelor` or `Graduate` degree. As before, if the recorded value for either was NA, the value in your new variable should also be NA.
+```{r}
+gss <- gss %>% 
+  mutate(
+    bachelor_graduate=if_else(
+      degree=="Bachelor" | degree=="Graduate","Yes",if_else(
+        degree=="NA","NA","No")))
+```
+
+1. Calculate the proportion of `bachelor_graduate` who do (Yes) and who don't (No) use twitter. 
+```{r}
+count(gss$bachelor_graduate == "Yes" & gss$twitter == "Yes")/
+  count(gss$bachelor_graduate == "Yes" & gss$twitter !="NA" )
+```
+
+1. Using the CI formula for proportions, please construct two 95% CIs for `bachelor_graduate` vs whether they use (Yes) and don't (No) use twitter. 
+```{r}
+# bachelor_graduate using twitter
+gss_bg <- gss %>% 
+  filter(gss$bachelor_graduate =="Yes")
+
+total_bg <- count(gss_bg$bachelor_graduate)
+print(total_bg)
+
+yes_p <- count(gss_bg$twitter == "Yes")/total_bg
+error_yes <- qnorm(0.95)*sqrt(yes_p*(1-yes_p)/count(gss_bg$twitter)) 
+left_yes <- yes_p - error_yes
+right_yes <- yes_p + error_yes
+
+
+print(left_yes)
+print(right_yes)
+
+
+# bachelor_graduate not using twitter
+no_p <- count(gss_bg$twitter == "No")/total_bg
+error_no <- qnorm(0.95)*sqrt(no_p*(1-no_p)/count(gss_bg$twitter)) 
+left_no <- no_p - error_no
+right_no <- no_p + error_no
+
+print(left_no)
+print(right_no)
+```
